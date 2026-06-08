@@ -1,15 +1,22 @@
 // ============================================================================
 // SECTION 1: GLOBAL SITE NAV AND TIME ZONE TARGETING
 // ============================================================================
-// Manages smooth scrolling behaviors across various section wrapper tags.
+// Manages smooth scrolling behaviors across various section wrapper tags safely.
 
 document.querySelectorAll(".nav-link").forEach((btn) => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (e) => {
     const target = btn.getAttribute("data-target");
+    
+    // 💡 THE ESSENTIAL FIX: Only intercept the click if data-target exists!
     if (target) {
+      e.preventDefault(); // Prevents any default jumping bugs
       const el = document.querySelector(target);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
+    // If target is null (Projects, Blog, Gallery), this block is skipped,
+    // allowing the browser to smoothly navigate to the respective pages.
   });
 });
 
@@ -17,6 +24,7 @@ document.getElementById("home-btn").addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
+// Automatically keeps your footer year perfectly up to date
 document.getElementById("year").textContent = new Date().getFullYear();
 
 
@@ -259,3 +267,20 @@ if (scheduleButton) {
     return false;
   });
 }
+
+// ============================================================================
+// SECTION 9: BENTO GRID INTERACTIVE MOUSE TRACKING ENGINE
+// ============================================================================
+// Tracks custom cursor trajectories to map light distortion on glass matrices.
+
+document.querySelectorAll('.bento-box').forEach((box) => {
+  box.addEventListener('mousemove', (e) => {
+    const rect = box.getBoundingClientRect();
+    const x = e.clientX - rect.left; // Anchor coordinates inside card container boundary
+    const y = e.clientY - rect.top;
+    
+    // Updates local custom property states inside target node context
+    box.style.setProperty('--mouse-x', `${x}px`);
+    box.style.setProperty('--mouse-y', `${y}px`);
+  });
+});

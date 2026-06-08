@@ -28,113 +28,85 @@ body {
   overflow-x: hidden;
 }
 
-
 /* ============================================================================
-   SECTION 2: ELEGANT INTERSTELLAR BACKGROUND & INDEPENDENT BLOCKS
+   REPLACEMENTS IN SECTION 2: THE INTERSTELLAR ANOMALY EFFECTS
    ============================================================================ */
-/* Deep base vacuum space container layer holding custom cosmic clouds */
-#cosmic-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background: radial-gradient(circle at bottom left, #050b14 0%, #020406 100%);
-  overflow: hidden;
-}
 
-/* 🌌 ELEMENT 1: HIGH-DENSITY TWINKLING BACKGROUND STARS */
-.ambient-starfield {
-  position: absolute;
-  inset: 0;
-  background-image: 
-    radial-gradient(1px 1px at 10% 20%, #ffffff 100%, transparent),
-    radial-gradient(1.5px 1.5px at 30% 65%, #ffffff 80%, transparent),
-    radial-gradient(1px 1px at 55% 40%, rgba(255,255,255,0.7) 100%, transparent),
-    radial-gradient(2px 2px at 75% 15%, #ffffff 90%, transparent),
-    radial-gradient(1px 1px at 85% 80%, #ffffff 60%, transparent);
-  background-size: 400px 400px;
-  opacity: 0.45;
-}
-
-/* 🌌 ELEMENT 2: CHRONO-BALANCED AURORA BOREALIS LIGHT STRIPS */
-.aurora-borealis-ribbon {
-  position: absolute;
-  top: -15%;
-  left: -10%;
-  width: 130%;
-  height: 65%;
-  background: radial-gradient(ellipse at 50% 20%, var(--dynamic-aurora-top) 0%, var(--dynamic-aurora-bottom) 45%, transparent 75%);
-  filter: blur(55px);
-  opacity: 0.28;
-  transform-origin: center top;
-  animation: auroraWave 22s ease-in-out infinite alternate;
-}
-
-@keyframes auroraWave {
-  0% { transform: rotate(-2deg) scaleY(0.9); opacity: 0.22; }
-  100% { transform: rotate(3deg) scaleY(1.1); opacity: 0.32; }
-}
-
-/* 🌌 ELEMENT 3: AMBIENT INTERSTELLAR GAS CLUSTERS (NEBULA) */
-.interstellar-nebula-cluster {
-  position: absolute;
-  top: 20%;
-  right: -10%;
-  width: 60vw;
-  height: 60vw;
-  background: radial-gradient(circle, var(--dynamic-nebula-glow) 0%, transparent 70%);
-  filter: blur(70px);
-  opacity: 0.35;
-  animation: nebulaPulse 18s ease-in-out infinite alternate;
-}
-
-@keyframes nebulaPulse {
-  0% { transform: scale(0.95) translate(-20px, 10px); opacity: 0.28; }
-  100% { transform: scale(1.05) translate(10px, -20px); opacity: 0.42; }
-}
-
-/* 🌌 ELEMENT 4: SUBTLE, FAR-AWAY PORTRAIT ANOMALY (BLACK HOLE) */
-/* Shrunk way down to sit cleanly and elegantly in deep space */
+/* The elegant, far-away micro-black hole gravitational anomaly system */
 .distant-black-hole {
   position: absolute;
-  top: 32%;
-  left: 28%;
-  width: 160px;
-  height: 160px;
+  top: 28%;
+  left: 24%;
+  width: 220px;
+  height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: rotate(-12deg);
-  opacity: 0.85;
+  /* Tilts the entire gravity well into a realistic space plane angle */
+  transform: rotate3d(1, 1, 1, -15deg);
+  opacity: 0.88;
+  pointer-events: none;
 }
 
 /* The dark central gravitational core node */
 .bh-singularity {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   background: #000000;
   border-radius: 50%;
-  box-shadow: 0 0 16px 4px #000000;
-  z-index: 2;
+  /* Creates the intense gravitational shadow effect */
+  box-shadow: 0 0 24px 8px #000000, 
+              0 0 60px 20px rgba(254, 215, 170, 0.15);
+  z-index: 3;
+  position: relative;
 }
 
 /* The horizontal glowing matter disk tracking around the core edge */
+/* Extended and layered with a multi-stage time dilation warp animation */
 .bh-accretion-disk {
   position: absolute;
-  width: 140px;
-  height: 14px;
-  background: linear-gradient(90deg, transparent 0%, #fed7aa 25%, #ea580c 50%, #fed7aa 75%, transparent 100%);
+  width: 190px;
+  height: 24px;
+  /* Rich, fiery matter gradient */
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(254, 215, 170, 0.9) 20%, 
+    rgba(234, 88, 12, 1) 50%, 
+    rgba(254, 215, 170, 0.9) 80%, 
+    transparent 100%
+  );
   border-radius: 50%;
   filter: blur(1.5px);
-  box-shadow: 0 0 25px rgba(234, 88, 12, 0.8);
-  transform: rotate(-5deg);
-  animation: accretionGlow 6s ease-in-out infinite alternate;
-  z-index: 1;
+  box-shadow: 0 0 35px rgba(234, 88, 12, 0.85),
+              0 0 70px rgba(249, 115, 22, 0.4);
+  /* Triggers the dual-phase shifting and gravitational warping */
+  animation: interstellarWarp 9s linear infinite;
+  z-index: 2;
 }
 
-@keyframes accretionGlow {
-  0% { transform: rotate(-5deg) scale(0.96); filter: blur(1.5px); opacity: 0.75; }
-  100% { transform: rotate(-3deg) scale(1.04); filter: blur(2.5px); opacity: 0.95; }
+/* 🌌 THE TRUE INTERSTELLAR TIME DILATION ANIMATION MATRIX */
+/* This spins the accretion disk while smoothly fluctuating its physical scale and orientation */
+@keyframes interstellarWarp {
+  0% {
+    transform: rotate(0deg) scaleX(1) scaleY(1);
+    filter: blur(1.5px);
+  }
+  25% {
+    transform: rotate(90deg) scaleX(1.08) scaleY(0.92);
+    filter: blur(2.2px);
+  }
+  50% {
+    transform: rotate(180deg) scaleX(0.95) scaleY(1.05);
+    filter: blur(1.8px);
+  }
+  75% {
+    transform: rotate(270deg) scaleX(1.05) scaleY(0.95);
+    filter: blur(2.5px);
+  }
+  100% {
+    transform: rotate(360deg) scaleX(1) scaleY(1);
+    filter: blur(1.5px);
+  }
 }
 
 
@@ -361,8 +333,8 @@ body {
 }
 
 
-/* ============================================================================
-   SECTION 6: WRAPPERS AND PLACEMENT MATRICES
+//* ============================================================================
+   SECTION 6: WRAPPERS AND PLACEMENT MATRICES (CLEANED & OPTIMIZED)
    ============================================================================ */
 .hero {
   padding: 6rem 2rem 4rem 2rem;
@@ -387,9 +359,18 @@ body {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  object-fit: cover;
+  /* 💡 PREMIUM FIX: 'cover' fills the entire frame, while 'center 20%' shifts 
+     the image framing down so your face isn't cut off at the top! */
+  object-fit: cover; 
+  object-position: center 20%;
   border: 3px solid var(--accent-emerald);
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Duplicates successfully removed down to one smooth animation trigger */
+.profile-img:hover {
+  transform: scale(1.05);
 }
 
 .profile-caption {
@@ -516,7 +497,6 @@ body {
   box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
 }
 
-
 /* ============================================================================
    SECTION 7: SCREEN RE-ARRANGEMENT QUERIES (RESPONSIVE VIEW OVERRIDES)
    ============================================================================ */
@@ -525,4 +505,280 @@ body {
   .hero-text h1 { margin-left: auto; margin-right: auto; }
   .resume-buttons { justify-content: center; }
   .distant-black-hole { left: 40%; top: 15%; }
+}
+
+
+/* Text for cinematic text of about section */
+/* ============================================================================
+   SECTION 9: GRAPHICALLY ARTISTIC COSMIC ABOUT SECTION
+   ============================================================================ */
+.cosmic-about {
+  position: relative;
+  overflow: visible;
+}
+
+.about-header-group {
+  margin-bottom: 3.5rem;
+}
+
+.quantum-line {
+  height: 2px;
+  width: 80px;
+  background: linear-gradient(90deg, var(--accent-emerald), transparent);
+  margin-top: 0.75rem;
+}
+
+/* Split Hook Section */
+.about-hero-split {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+  margin-bottom: 5rem;
+}
+
+.manifesto-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--accent-orange);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.manifesto-heading {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(120deg, #ffffff 40%, rgba(255,255,255,0.6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.manifesto-body {
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.impact-badges {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Counter Telemetry Cards */
+.telemetry-counter-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.counter-card {
+  background: linear-gradient(135deg, rgba(8, 14, 22, 0.6) 0%, rgba(4, 8, 12, 0.4) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-left: 3px solid var(--accent-emerald);
+  padding: 1.25rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.counter-card:hover {
+  transform: translateX(6px);
+  background: rgba(12, 22, 34, 0.6);
+  border-left-color: var(--accent-orange);
+}
+
+.counter-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: monospace;
+}
+
+.counter-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Timeline Components */
+.subsection-title {
+  font-size: 1.25rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cosmic-timeline {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 6rem;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent-emerald) 0%, var(--accent-orange) 50%, rgba(255,255,255,0.05) 100%);
+}
+
+.timeline-node {
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+.timeline-node:last-child {
+  margin-bottom: 0;
+}
+
+.node-marker {
+  position: absolute;
+  left: calc(-2rem - 2px);
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  background: #030712;
+  border: 3px solid var(--accent-emerald);
+  border-radius: 50%;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.timeline-node:hover .node-marker {
+  background: var(--accent-orange);
+  border-color: #ffffff;
+  box-shadow: 0 0 12px var(--accent-orange);
+}
+
+.node-meta {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.node-content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.node-content p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 850px;
+}
+
+/* Addictive Bento Grid System */
+.bento-lifestyle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.bento-box {
+  position: relative;
+  background: rgba(6, 11, 19, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+}
+
+.bento-box.wide {
+  grid-column: span 2;
+}
+
+.bento-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.bento-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.text-orange { color: var(--accent-orange); }
+.text-emerald { color: var(--accent-emerald); }
+.text-blue { color: #38bdf8; }
+
+.bento-box h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #ffffff;
+}
+
+.bento-box p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+/* Immersive Neon Lighting Hover Physics */
+.bento-glow-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle 140px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.04), transparent 80%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.bento-box:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.bento-box:hover .bento-glow-overlay {
+  opacity: 1;
+}
+
+.venture-box:hover { box-shadow: 0 15px 40px rgba(249, 115, 22, 0.05); }
+.culinary-box:hover { box-shadow: 0 15px 40px rgba(16, 185, 129, 0.05); }
+.intelligence-box:hover { box-shadow: 0 15px 40px rgba(56, 189, 248, 0.05); }
+
+/* Responsive Media Compilers */
+@media (max-width: 968deg) {
+  .about-hero-split {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .bento-lifestyle-grid {
+    grid-template-columns: 1fr;
+  }
+  .bento-box.wide {
+    grid-column: span 1;
+  }
 }
