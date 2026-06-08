@@ -8,31 +8,42 @@
 </head>
 
 <body>
+
+  <!-- ① WEATHER FX LAYER — must be first inside body -->
+  <div id="weather-fx" aria-hidden="true"></div>
+
   <header class="main-header">
     <div class="logo">
       <span class="logo-mark">S</span>
       <span class="logo-text">Sadat Mahmud</span>
     </div>
 
-<nav class="main-nav">
-  <button class="nav-link" id="home-btn">Home</button>
-  <button class="nav-link" data-target="#about">About</button>
-  <a href="projects.html" class="nav-link">Projects & Case Studies</a>
-  <a href="blog.html" class="nav-link">Blog Posts</a>
-  <a href="gallery.html" class="nav-link">Photo Gallery</a>
-  <button class="nav-link" data-target="#contact">Contact</button>
-</nav>
+    <!-- ② NAV with data-i18n attributes -->
+    <nav class="main-nav">
+      <button class="nav-link" id="home-btn" data-i18n="nav_home">Home</button>
+      <button class="nav-link" data-target="#about" data-i18n="nav_about">About</button>
+      <a href="projects.html" class="nav-link" data-i18n="nav_projects">Projects & Case Studies</a>
+      <a href="blog.html" class="nav-link" data-i18n="nav_blog">Blog Posts</a>
+      <a href="gallery.html" class="nav-link" data-i18n="nav_gallery">Photo Gallery</a>
+      <button class="nav-link" data-target="#contact" data-i18n="nav_contact">Contact</button>
+    </nav>
+
+    <!-- ③ GOOGLE TRANSLATE — after nav, inside header -->
+    <div id="google_translate_element"></div>
+
   </header>
 
   <main>
+
     <!-- HERO SECTION -->
     <section class="hero" id="home">
+
       <div class="hero-content">
 
         <!-- LEFT SIDE TEXT -->
         <div class="hero-text">
-          <h1>Data, stories, and meaningful decisions.</h1>
-          <p class="hero-subtitle">
+          <h1 data-i18n="hero_heading">Data, stories, and meaningful decisions.</h1>
+          <p class="hero-subtitle" data-i18n="hero_subtitle">
             I turn complex data into clear narratives that help people and businesses act with confidence.
           </p>
         </div>
@@ -42,25 +53,24 @@
           <img src="Assets/foto.jpg" alt="Profile picture of Sadat Mahmud" class="profile-img" />
           <div class="profile-caption">
             <h2>Sadat Mahmud</h2>
-            <p>Data Analyst · Storyteller · Problem Solver</p>
+            <p data-i18n="hero_role">Data Analyst · Storyteller · Problem Solver</p>
           </div>
         </div>
 
-      </div> <!-- END hero-content -->
+      </div><!-- END hero-content -->
 
       <!-- MISSION & VISION -->
       <div class="mission-vision">
         <div class="card">
-          <h3>Mission</h3>
-          <p>
-            I don’t just analyze data—I uncover the stories your business didn’t know it was telling.
+          <h3 data-i18n="mission_title">Mission</h3>
+          <p data-i18n="mission_text">
+            I don't just analyze data—I uncover the stories your business didn't know it was telling.
             Every number has a narrative, and every insight begins with a hidden story worth revealing.
           </p>
         </div>
-
         <div class="card">
-          <h3>Vision</h3>
-          <p>
+          <h3 data-i18n="vision_title">Vision</h3>
+          <p data-i18n="vision_text">
             A future where data is not only collected but deeply understood and applied ethically—
             driving human-centered innovation and empowering businesses and society to make informed,
             impactful decisions.
@@ -68,75 +78,84 @@
         </div>
       </div>
 
-      <!-- TOOLKIT -->
-<div class="toolkit-item weather-card" id="weather-card">
-  <div class="wc-top">
-    <div>
-      <div class="wc-city">📍 Dortmund, DE</div>
-      <div class="wc-condition" id="wc-condition">Loading...</div>
-    </div>
-    <div class="wc-temp" id="wc-temp">--°C</div>
-  </div>
+      <!-- ④ TOOLKIT — wrapper restored -->
+      <div class="toolkit">
 
-  <div class="wc-mood">
-    <div class="wc-mood-label">Today's work mood</div>
-    <div class="wc-mood-text" id="weather-status">Fetching weather...</div>
-  </div>
+        <!-- WEATHER CARD -->
+        <div class="toolkit-item weather-card" id="weather-card">
+          <div class="wc-top">
+            <div>
+              <!-- CITY ROW WITH LOCATION BUTTON -->
+              <div class="wc-city-row">
+                <span class="wc-city" id="wc-city">📍 Dortmund, DE</span>
+                <button class="wc-locate-btn" id="wc-locate-btn" title="Use my location">⊙ Use my location</button>
+              </div>
+              <div class="wc-condition" id="wc-condition">Loading...</div>
+            </div>
+            <div class="wc-temp" id="wc-temp">--°C</div>
+          </div>
 
-  <div class="wc-stats">
-    <div class="wc-stat">
-      <div class="wc-stat-label">Humidity</div>
-      <div class="wc-stat-value"><span id="wc-humidity">--</span>%</div>
-    </div>
-    <div class="wc-stat">
-      <div class="wc-stat-label">Wind</div>
-      <div class="wc-stat-value"><span id="wc-wind">--</span> km/h</div>
-    </div>
-    <div class="wc-stat">
-      <div class="wc-stat-label">Feels like</div>
-      <div class="wc-stat-value"><span id="wc-feels">--</span>°C</div>
-    </div>
-  </div>
+          <div class="wc-mood">
+            <div class="wc-mood-label" data-i18n="weather_mood_label">Today's work mood</div>
+            <div class="wc-mood-text" id="weather-status">Fetching weather...</div>
+          </div>
 
-  <div class="wc-sun">
-    <div class="wc-sun-item">
-      <div class="wc-sun-label">🌅 Sunrise</div>
-      <div class="wc-sun-val" id="wc-sunrise">--:--</div>
-    </div>
-    <div class="wc-progress-wrap">
-      <div class="wc-track">
-        <div class="wc-fill" id="wc-fill"></div>
-        <div class="wc-dot" id="wc-dot"></div>
-      </div>
-    </div>
-    <div class="wc-sun-item" style="text-align:right;">
-      <div class="wc-sun-label">🌇 Sunset</div>
-      <div class="wc-sun-val" id="wc-sunset">--:--</div>
-    </div>
-  </div>
+          <div class="wc-stats">
+            <div class="wc-stat">
+              <div class="wc-stat-label">Humidity</div>
+              <div class="wc-stat-value"><span id="wc-humidity">--</span>%</div>
+            </div>
+            <div class="wc-stat">
+              <div class="wc-stat-label">Wind</div>
+              <div class="wc-stat-value"><span id="wc-wind">--</span> km/h</div>
+            </div>
+            <div class="wc-stat">
+              <div class="wc-stat-label">Feels like</div>
+              <div class="wc-stat-value"><span id="wc-feels">--</span>°C</div>
+            </div>
+          </div>
 
-  <div class="wc-updated" id="wc-updated">Updating...</div>
-</div>
+          <div class="wc-sun">
+            <div class="wc-sun-item">
+              <div class="wc-sun-label">🌅 Sunrise</div>
+              <div class="wc-sun-val" id="wc-sunrise">--:--</div>
+            </div>
+            <div class="wc-progress-wrap">
+              <div class="wc-track">
+                <div class="wc-fill" id="wc-fill"></div>
+                <div class="wc-dot" id="wc-dot"></div>
+              </div>
+            </div>
+            <div class="wc-sun-item" style="text-align:right;">
+              <div class="wc-sun-label">🌇 Sunset</div>
+              <div class="wc-sun-val" id="wc-sunset">--:--</div>
+            </div>
+          </div>
 
-        <div class="toolkit-item">
-          <h3>Book a Time with Me</h3>
-          <p>Choose a slot that works for you.</p>
-          <button id="schedule-button">Open Schedule</button>
+          <div class="wc-updated" id="wc-updated">Updating...</div>
         </div>
-      </div>
+
+        <!-- SCHEDULE ITEM — restored -->
+        <div class="toolkit-item">
+          <h3 data-i18n="schedule_title">Book a Time with Me</h3>
+          <p data-i18n="schedule_text">Choose a slot that works for you.</p>
+          <button id="schedule-button" data-i18n="schedule_btn">Open Schedule</button>
+        </div>
+
+      </div><!-- END toolkit -->
 
       <!-- RESUME BUTTONS -->
       <div class="resume-buttons">
-        <a href="Assets/Labenslauf_sadat_mahmud.pdf" class="btn" download>Download Resume (EN)</a>
-        <a href="Assets/Labenslauf_sadat_mahmud.pdf" class="btn outline" download>Download Lebenslauf (DE)</a>
+        <a href="Assets/Labenslauf_sadat_mahmud.pdf" class="btn" download data-i18n="resume_en">Download Resume (EN)</a>
+        <a href="Assets/Labenslauf_sadat_mahmud.pdf" class="btn outline" download data-i18n="resume_de">Download Lebenslauf (DE)</a>
       </div>
 
     </section>
 
     <!-- ABOUT -->
     <section id="about" class="section">
-      <h2>About</h2>
-      <p>
+      <h2 data-i18n="nav_about">About</h2>
+      <p data-i18n="about_text">
         Write a short, honest paragraph about who you are, what you care about, and how you work.
         Focus on how you think, not just tools you use.
       </p>
@@ -144,35 +163,48 @@
 
     <!-- PROJECTS -->
     <section id="projects" class="section">
-      <h2>Projects & Case Studies</h2>
+      <h2 data-i18n="nav_projects">Projects & Case Studies</h2>
       <p>Later you can add cards here for each project with links to GitHub or live demos.</p>
     </section>
 
     <!-- BLOG -->
     <section id="blog" class="section">
-      <h2>Blog Posts</h2>
+      <h2 data-i18n="nav_blog">Blog Posts</h2>
       <p>List your articles or link to Medium/Substack here.</p>
     </section>
 
     <!-- GALLERY -->
     <section id="gallery" class="section">
-      <h2>Photo Gallery</h2>
+      <h2 data-i18n="nav_gallery">Photo Gallery</h2>
       <p>Show a bit of your visual side—photos, data visualizations, or behind-the-scenes shots.</p>
     </section>
 
     <!-- CONTACT -->
     <section id="contact" class="section">
-      <h2>Contact</h2>
+      <h2 data-i18n="nav_contact">Contact</h2>
       <p>You can reach me via email at <a href="mailto:you@example.com">you@example.com</a>.</p>
     </section>
 
   </main>
 
   <footer class="main-footer">
-    <p>© <span id="year"></span> Sadat Mahmud. All rights reserved.</p>
+    <p data-i18n="footer_text">© <span id="year"></span> Sadat Mahmud. All rights reserved.</p>
   </footer>
 
+  <!-- ⑤ SCRIPTS — always last before closing body -->
   <script src="script.js"></script>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,de,bn,ar,tr,fr,zh-CN,pt',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 </html>
 
