@@ -37,7 +37,7 @@ const weatherStatusEl = document.getElementById("weather-status");
 
 async function getWeatherData(query = "Dortmund") {
   // Your authenticated WeatherAPI system key access credential
-  const myApiKey = "1894d40599bd47efb88115802260906git";
+  const myApiKey = "1894d40599bd47efb88115802260906";
   const url = `https://api.weatherapi.com/v1/forecast.json?key=${myApiKey}&q=${encodeURIComponent(query)}&days=1&aqi=no`;
   
   try {
@@ -256,15 +256,15 @@ generateWeatherAtmosphereEffects("clear");
 const activeHorizon = localStorage.getItem("cosmic-location") || "Dortmund";
 loadWeatherSystem(activeHorizon);
 
-// FUNCTIONAL INTEGRATION: Launches Calendly popup directly over your background
+// FUNCTIONAL INTEGRATION: Launches Calendly popup
 const scheduleButton = document.getElementById("schedule-button");
 if (scheduleButton) {
-  scheduleButton.addEventListener("click", (e) => {
+  scheduleButton.addEventListener("click", function(e) {
     e.preventDefault();
+    // This simple structure is much more reliable
     Calendly.initPopupWidget({
-      url: 'https://calendly.com/sadatmahmud334/30min'// 👈 Paste your exact Calendly link here!
+      url: 'https://calendly.com/sadatmahmud334/30min'
     });
-    return false;
   });
 }
 
