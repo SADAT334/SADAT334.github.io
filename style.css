@@ -673,15 +673,20 @@ body {
 }
 
 .contact-details {
-  flex: 1;          /* allows text to take full width */
-  min-width: 0;     /* REQUIRED so nowrap works inside flex */
+  flex: 1;
+  min-width: 0;
 }
 
+/* Updated section */
 .contact-details p,
 .contact-details h3 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Change these to allow wrapping */
+  white-space: normal; 
+  overflow: visible;
+  text-overflow: clip;
+  
+  /* Optional: prevents long strings like emails from breaking words awkwardly */
+  word-break: break-all; 
 }
 
 
