@@ -1252,7 +1252,45 @@ document.querySelectorAll('.bento-box').forEach((box) => {
     box.style.setProperty('--mouse-y', `${y}px`);
   });
 });
+.blog-post {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-prime);
+  color: var(--text-main);
+}
 
+.blog-post h1 { color: var(--accent-emerald); }
+.blog-post h2 { margin-top: 30px; color: var(--accent-orange); }
+.meta { color: var(--text-muted); font-style: italic; }
+.references a { color: var(--accent-emerald); text-decoration: none; }
+.references a:hover { text-decoration: underline; }
+/* Responsive adjustments for images and lists within the blog */
+.blog-post img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-prime);
+  margin: 20px 0;
+}
+
+.blog-post ul {
+  padding-left: 20px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.blog-post li {
+  margin-bottom: 10px;
+  color: var(--text-main);
+}
+
+.blog-post p {
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
 
 ---
 
