@@ -1323,6 +1323,29 @@ h1 {
     box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 
+/* Gallery Masonry Layout */
+.gallery-container {
+    display: columns;
+    column-count: 3;
+    column-gap: 15px;
+    padding: 20px;
+}
+
+.photo-item {
+    margin-bottom: 15px;
+    break-inside: avoid;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.photo-meta {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    text-transform: uppercase;
+}
+
 ---
 
 ### Key Upgrades Implemented:

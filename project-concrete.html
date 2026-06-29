@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concrete Strength Analysis | Sadat Mahmud</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Professional Formatting for the Content Page */
+    .detail-container { max-width: 900px; margin: 100px auto 50px; padding: 20px; }
+    .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: start; margin-top: 40px; }
+    .summary-box { background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); }
+    .tech-snapshot { background: rgba(56, 189, 248, 0.05); padding: 25px; border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.2); }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { text-align: left; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 10px; color: #cbd5e1; }
+  </style>
+</head>
+<body>
+
+  <main class="detail-container">
+    <a href="projects.html" style="color: #38bdf8; text-decoration: none;">← Back to Projects</a>
+    
+    <h1 style="margin: 20px 0; font-size: 2.5rem;">Concrete Compressive Strength Analysis</h1>
+    
+    <img src="/home/sadat334/website tools/Assets/Projects folder/Project 1/regression.png" alt="Regression Analysis Dashboard" style="width:100%; border-radius:16px; border: 1px solid #38bdf8;">
+
+    <div class="content-grid">
+        <div class="summary-box">
+            <h3>Objective</h3>
+            <p style="color: #cbd5e1; line-height: 1.6;">This project addresses a fundamental challenge in civil engineering: predicting the load-bearing capacity of concrete mixtures without relying solely on time-consuming physical testing. By leveraging predictive modeling, we aim to optimize mixture ratios, reduce material waste, and improve structural safety standards.</p>
+
+            <h3>Methodology & Approach</h3>
+            <ul>
+                <li><strong>Exploratory Data Analysis (EDA):</strong> Identified non-linear relationships between components (e.g., Cement, Water, Superplasticizer) and final strength.</li>
+                <li><strong>Feature Engineering:</strong> Employed Best Subset Selection to identify the most statistically significant predictors, reducing model complexity while maintaining predictive power.</li>
+                <li><strong>Diagnostic Validation:</strong> Conducted Multicollinearity Analysis (VIF) to ensure model stability and performed Residual Analysis (Residuals vs. Fitted, Q-Q Plots) to validate homoscedasticity and normality assumptions.</li>
+            </ul>
+
+            <h3>Key Findings</h3>
+            <p style="color: #cbd5e1; line-height: 1.6;">The developed regression model successfully accounts for <strong>61.2%</strong> of the observed variation in compressive strength. Statistical analysis confirmed that Cement, Water content, and Age are the primary drivers of strength development. The resulting model serves as a robust decision-support tool for engineers to iterate on concrete formulas effectively.</p>
+        </div>
+
+        <div class="tech-snapshot">
+            <h3>Technical Stack</h3>
+            <table>
+                <tr><th>Category</th><th>Tools</th></tr>
+                <tr><td>Languages/Libs</td><td>Python, Pandas, Scikit-Learn, Statsmodels, Matplotlib, Seaborn</td></tr>
+                <tr><td>Methods</td><td>Linear Regression, Polynomial Regression, Confidence Intervals</td></tr>
+                <tr><td>Optimization</td><td>Best Subset Selection, AIC, BIC</td></tr>
+                <tr><td>Validation</td><td>VIF, Residual Analysis, Q-Q Plotting</td></tr>
+            </table>
+
+            <div style="margin-top: 30px;">
+                <a href="https://github.com/SADAT334/Regression-Analysis-to-check-correlations-between-compressive-strength-and-concrete-composition" class="btn" style="display:block; text-align:center; margin-bottom:10px;">View GitHub Repository</a>
+                <a href="Sadat_Mahmud_ICS_P3_Report.pdf" class="btn outline" style="display:block; text-align:center;">Download Full PDF Report</a>
+            </div>
+        </div>
+    </div>
+  </main>
+</body>
+</html>

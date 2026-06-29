@@ -284,3 +284,21 @@ document.querySelectorAll('.bento-box').forEach((box) => {
     box.style.setProperty('--mouse-y', `${y}px`);
   });
 });
+
+function openProject(modalId) {
+    document.getElementById(modalId).style.display = "block";
+}
+
+function closeProject() {
+    document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+}
+
+// Close modal if user clicks outside the modal content
+window.onclick = function(event) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    });
+}
