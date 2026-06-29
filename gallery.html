@@ -1,10 +1,45 @@
-<main class="section" style="padding-top: 100px;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | Sadat Mahmud</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .gallery-container { max-width: 1000px; margin: 100px auto 50px; padding: 20px; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
+    .gallery-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; overflow: hidden; }
+    .gallery-card img { width: 100%; height: 300px; object-fit: cover; }
+    .gallery-caption { padding: 25px; }
+    .meta-tag { color: #38bdf8; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+  </style>
+</head>
+<body>
+
+  <main class="gallery-container">
     <h2 class="glitch-title" style="text-align: center;">Visual Observations</h2>
-    
-    <div class="gallery-container">
-      <div class="photo-item">
-        <img src="path_to_your_photo.jpg" alt="Description">
-        <p class="photo-meta">Leica M10 | 35mm Summilux</p>
-      </div>
-      </div>
-</main>
+    <p style="text-align: center; color: #94a3b8; margin-bottom: 50px;">A collection of moments from my professional and personal journey.</p>
+
+    <div class="gallery-grid">
+        <article class="gallery-card">
+            <img src="westenergie.jpg" alt="Westenergie Cup Team">
+            <div class="gallery-caption">
+                <span class="meta-tag">26.06.2026 • Essen, Germany</span>
+                
+                <h3 style="font-weight: 800; font-size: 1.5rem; margin-bottom: 15px;">
+                    <span style="color: #000000; background-color: #ffffff; padding: 0 4px; border-radius: 4px;">West</span><span style="color: #facc15;">energie</span> Cup
+                </h3>
+                
+                <p style="line-height: 1.6; color: #cbd5e1;">
+                    Securing 5th place at the Westenergie Cup was a highlight of my recent team collaborations. 
+                    This competition tested our ability to solve complex problems under strict time constraints. 
+                    Beyond the rank, the experience reinforced the importance of clear communication and 
+                    role specialization in high-stakes technical environments.
+                </p>
+            </div>
+        </article>
+    </div>
+  </main>
+
+</body>
+</html>
