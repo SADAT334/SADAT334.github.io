@@ -1366,6 +1366,29 @@ h1 {
   .toolkit, .mission-vision { grid-template-columns: 1fr; }
 }
 
+/* ============================================================================
+   RESPONSIVE OVERRIDES
+   ============================================================================ */
+
+/* 1. TABLET VIEW (Targets iPads and smaller laptops) */
+@media (max-width: 1024px) {
+  /* Reduce side padding so content has more room */
+  body { padding: 0 1rem; }
+  
+  /* Make your grid a bit more compact */
+  .bento-grid { 
+    grid-template-columns: repeat(2, 1fr); /* 2 columns instead of 3 or 4 */
+  }
+}
+
+/* 2. MOBILE VIEW (Targets all phones) */
+@media (max-width: 600px) {
+  /* Stack everything into 1 column for phones */
+  .bento-grid { 
+    grid-template-columns: 1fr; 
+  }
+}
+
 ---
 
 ### Key Upgrades Implemented:
