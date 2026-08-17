@@ -302,3 +302,52 @@ window.onclick = function(event) {
         }
     });
 }
+
+// ============================================================================
+// SECTION 10: AI CHAT WIDGET INTEGRATION
+// ============================================================================
+const chatWindow = document.getElementById("ai-chat-window");
+const launcherBtn = document.getElementById("ai-launcher-btn");
+const closeBtn = document.getElementById("ai-close-btn");
+const sendBtn = document.getElementById("ai-send-btn");
+const userInput = document.getElementById("ai-user-input");
+const chatMessages = document.getElementById("ai-chat-messages");
+
+// 1. Toggle Chat Window
+launcherBtn.addEventListener("click", () => chatWindow.style.display = "block");
+closeBtn.addEventListener("click", () => chatWindow.style.display = "none");
+
+// 2. Handle Messaging
+sendBtn.addEventListener("click", sendMessage);
+userInput.addEventListener("keypress", (e) => { if (e.key === 'Enter') sendMessage(); });
+
+async function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    // Display user message
+    appendMessage(text, "user");
+    userInput.value = "";
+
+    try {
+        // Connect to your Hugging Face Space
+        const response = await fetch("https://sadat334-sadat-portfolio-chat.hf.space/api/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ data: [text, []] }) // Gradio API structure
+        });
+        
+        const result = await response.json();
+        appendMessage(result.data[0], "bot");
+    } catch (e) {
+        appendMessage("⚠️ Connection error. Please check the console.", "bot");
+    }
+}
+
+function appendMessage(text, sender) {
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `ai-message ${sender}`;
+    msgDiv.textContent = text;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
