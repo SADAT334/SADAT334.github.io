@@ -416,6 +416,300 @@
   </script>
   <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+  <!-- === SADAT'S AI ASSISTANT CHAT WIDGET === -->
+<style>
+  /* Chat Widget Container - Bottom Right */
+  #sadat-ai-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  /* Floating Avatar Button */
+  #ai-launcher-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    background: #0b0f19;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #ai-launcher-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(56, 189, 248, 0.3);
+  }
+
+  #ai-launcher-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Online Status Indicator Dot */
+  #ai-launcher-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 12px;
+    height: 12px;
+    background-color: #22c55e;
+    border: 2px solid #0b0f19;
+    border-radius: 50%;
+  }
+
+  /* Chat Window (Cosmic Aesthetic) */
+  #ai-chat-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 360px;
+    height: 500px;
+    background: linear-gradient(145deg, #0f172a 0%, #030712 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    display: none; /* Hidden by default */
+    animation: fadeInWindow 0.25s ease-out forwards;
+  }
+
+  @keyframes fadeInWindow {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Chat Header */
+  #ai-chat-header {
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ai-header-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ai-header-info img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .ai-header-text h4 {
+    margin: 0;
+    color: #f8fafc;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .ai-header-text span {
+    color: #38bdf8;
+    font-size: 12px;
+  }
+
+  #ai-close-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+  }
+
+  #ai-close-btn:hover {
+    color: #f8fafc;
+  }
+
+  /* Messages Body */
+  #ai-chat-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+  }
+
+  .ai-message {
+    max-width: 82%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+
+  .ai-message.bot {
+    background: rgba(30, 41, 59, 0.8);
+    color: #e2e8f0;
+    align-self: flex-start;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom-left-radius: 4px;
+  }
+
+  .ai-message.user {
+    background: #0284c7;
+    color: #ffffff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  /* Chat Input Footer */
+  #ai-chat-input-area {
+    padding: 12px 16px;
+    background: rgba(3, 7, 18, 0.95);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    gap: 8px;
+  }
+
+  #ai-user-input {
+    flex: 1;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #f8fafc;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #ai-user-input:focus {
+    border-color: #38bdf8;
+  }
+
+  #ai-send-btn {
+    background: #0284c7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  #ai-send-btn:hover {
+    background: #0ea5e9;
+  }
+</style>
+
+<!-- Widget Markup -->
+<div id="sadat-ai-widget">
+  <!-- Chat Window -->
+  <div id="ai-chat-window">
+    <div id="ai-chat-header">
+      <div class="ai-header-info">
+        <img src="Karolin.jpg" alt="Karoline">
+        <div class="ai-header-text">
+          <h4>Karoline Leavitt</h4>
+          <span>Communications Director</span>
+        </div>
+      </div>
+      <button id="ai-close-btn">&times;</button>
+    </div>
+    
+    <div id="ai-chat-messages">
+      <div class="ai-message bot">
+        Hi, I'm Karoline, Sadat's Communications Director. He is currently deep in a complex data model deployment—happily ignoring the world, as data scientists tend to do. How can I assist you with your inquiry today?
+      </div>
+    </div>
+
+    <div id="ai-chat-input-area">
+      <input type="text" id="ai-user-input" placeholder="Ask anything about Sadat..." />
+      <button id="ai-send-btn">Send</button>
+    </div>
+  </div>
+
+  <!-- Floating Launcher Button -->
+  <button id="ai-launcher-btn" title="Chat with Sadat's Assistant">
+    <img src="Karolin.jpg" alt="Chat Avatar">
+  </button>
+</div>
+
+<!-- Widget Logic Script -->
+<script>
+  const launcherBtn = document.getElementById('ai-launcher-btn');
+  const chatWindow = document.getElementById('ai-chat-window');
+  const closeBtn = document.getElementById('ai-close-btn');
+  const sendBtn = document.getElementById('ai-send-btn');
+  const userInput = document.getElementById('ai-user-input');
+  const chatMessages = document.getElementById('ai-chat-messages');
+
+  // Toggle chat window visibility
+  launcherBtn.addEventListener('click', () => {
+    chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
+    if (chatWindow.style.display === 'flex') {
+      userInput.focus();
+    }
+  });
+
+  closeBtn.addEventListener('click', () => {
+    chatWindow.style.display = 'none';
+  });
+
+  // Function to send message to your FastAPI backend
+  async function handleSendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    // Append user message to UI
+    appendMessage(text, 'user');
+    userInput.value = '';
+
+    // TODO: Replace with your actual deployed Render backend URL (e.g., https://your-app.onrender.com/chat)
+    const backendUrl = 'https://sadat334-sadat-portfolio-chat.hf.space/chat'; 
+
+    try {
+      const response = await fetch(backendUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+
+      const data = await response.json();
+      // Assuming your FastAPI returns { response: "..." }
+      const reply = data.response || "I've passed your message along to Sadat!";
+      appendMessage(reply, 'bot');
+    } catch (error) {
+      console.error('Error connecting to backend:', error);
+      appendMessage("I'm having a brief connection hiccup, but your message is logged for Sadat!", 'bot');
+    }
+  }
+
+  function appendMessage(text, sender) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('ai-message', sender);
+    msgDiv.textContent = text;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  sendBtn.addEventListener('click', handleSendMessage);
+  userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleSendMessage();
+  });
+</script>
+
 </body>
 </html>
 
