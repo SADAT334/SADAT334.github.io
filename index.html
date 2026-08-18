@@ -649,13 +649,24 @@
 </div>
 
 <!-- Widget Logic Script -->
-<script>
+<script type="module">
+  import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client@1/dist/index.min.js";
+
   const launcherBtn = document.getElementById('ai-launcher-btn');
   const chatWindow = document.getElementById('ai-chat-window');
   const closeBtn = document.getElementById('ai-close-btn');
   const sendBtn = document.getElementById('ai-send-btn');
   const userInput = document.getElementById('ai-user-input');
   const chatMessages = document.getElementById('ai-chat-messages');
+
+  // Connect to your Hugging Face Space once, reused for every message
+  let gradioClient = null;
+  async function getClient() {
+    if (!gradioClient) {
+      gradioClient = await Client.connect("Sadat334/sadat-portfolio-chat");
+    }
+    return gradioClient;
+  }
 
   // Toggle chat window visibility
   launcherBtn.addEventListener('click', () => {
@@ -669,28 +680,23 @@
     chatWindow.style.display = 'none';
   });
 
-  // Function to send message to your FastAPI backend
+  // Function to send message to your Gradio Space via the official JS client
   async function handleSendMessage() {
     const text = userInput.value.trim();
     if (!text) return;
 
-    // Append user message to UI
     appendMessage(text, 'user');
     userInput.value = '';
 
-    // TODO: Replace with your actual deployed Render backend URL (e.g., https://your-app.onrender.com/chat)
-    const backendUrl = 'https://sadat334-sadat-portfolio-chat.hf.space/chat'; 
-
     try {
-      const response = await fetch(backendUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text })
+      const client = await getClient();
+      // ChatInterface apps expose a "/chat" endpoint by default, taking (message, history)
+      const result = await client.predict("/chat", {
+        message: text,
+        history: []
       });
 
-      const data = await response.json();
-      // Assuming your FastAPI returns { response: "..." }
-      const reply = data.response || "I've passed your message along to Sadat!";
+      const reply = (result && result.data && result.data[0]) || "I've passed your message along to Sadat!";
       appendMessage(reply, 'bot');
     } catch (error) {
       console.error('Error connecting to backend:', error);
