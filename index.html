@@ -710,12 +710,12 @@
 
     const typingId = appendMessage("Karoline is typing...", 'bot');
 
-    try {
+   try {
       if (!gradioApp) {
         gradioApp = await Client.connect("sadat334/sadat-portfolio-chat");
       }
 
-      // Collect chat history
+      // Collect existing chat history for context
       const currentHistory = [];
       const messageElements = chatMessages.querySelectorAll('.ai-message');
       for (let i = 1; i < messageElements.length - 1; i += 2) {
@@ -724,6 +724,7 @@
         }
       }
 
+      // Send message and history array to the backend
       const result = await gradioApp.predict(0, [
         text,
         currentHistory
@@ -734,45 +735,32 @@
       let reply = "I've passed your message along to Sadat!";
       console.log("Raw Gradio Response:", result);
 
-      if (result) {
-        function extractText(obj) {
-          if (!obj) return null;
-          if (typeof obj === 'string') {
-            if (obj.includes('__type__') || obj.includes('chat_message')) return null;
-            return obj;
+      // Extract the model's chat output cleanly
+      if (result && result.data) {
+        // ChatInterface typically nests the message log in data[0]
+        const responseData = Array.isArray(result.data) ? result.data[0] : result.data;
+        
+        if (Array.isArray(responseData) && responseData.length > 0) {
+          const latestTurn = responseData[responseData.length - 1];
+          // Each turn is an array: [user_message, assistant_response]
+          if (Array.isArray(latestTurn) && latestTurn.length > 1) {
+            reply = latestTurn[1];
+          } else if (typeof latestTurn === 'string') {
+            reply = latestTurn;
           }
-          if (Array.isArray(obj)) {
-            for (let i = obj.length - 1; i >= 0; i--) {
-              const found = extractText(obj[i]);
-              if (found) return found;
-            }
-          } else if (typeof obj === 'object') {
-            if (obj.data) return extractText(obj.data);
-            if (obj.value) return extractText(obj.value);
-            for (let key in obj) {
-              if (key !== '__type__' && typeof obj[key] !== 'function') {
-                const found = extractText(obj[key]);
-                if (found) return found;
-              }
-            }
-          }
-          return null;
-        }
-
-        const extracted = extractText(result);
-        if (extracted) {
-          reply = extracted;
+        } else if (typeof responseData === 'string') {
+          reply = responseData;
         }
       }
       
       appendMessage(reply, 'bot');
 
-    } catch (error) {
+} catch (error) {
       console.error('Error communicating with AI backend:', error);
       removeMessage(typingId);
       appendMessage("I'm having a brief connection hiccup, but your message is logged for Sadat!", 'bot');
     }
-  }
+  } // <--- Closes handleSendMessage()
 
   if (sendBtn) {
     sendBtn.addEventListener('click', handleSendMessage);
