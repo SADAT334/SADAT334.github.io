@@ -648,7 +648,9 @@
 </div>
 
 <!-- Widget Logic Script -->
-<script>
+<script type="module">
+  import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/+esm";
+
   const launcherBtn = document.getElementById('ai-launcher-btn');
   const chatWindow = document.getElementById('ai-chat-window');
   const closeBtn = document.getElementById('ai-close-btn');
@@ -656,7 +658,17 @@
   const userInput = document.getElementById('ai-user-input');
   const chatMessages = document.getElementById('ai-chat-messages');
 
-  const SPACE_URL = 'https://sadat334-sadat-portfolio-chat.hf.space';
+  let gradioApp = null;
+
+  // Initialize connection to your Hugging Face Space
+  async function initGradioClient() {
+    try {
+      gradioApp = await Client.connect("sadat334/sadat-portfolio-chat");
+    } catch (err) {
+      console.error("Failed to connect to Hugging Face Space:", err);
+    }
+  }
+  initGradioClient();
 
   launcherBtn.addEventListener('click', () => {
     chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
@@ -669,50 +681,6 @@
     chatWindow.style.display = 'none';
   });
 
-  // Call Gradio's raw API directly with plain fetch (no credentials),
-  // bypassing the currently-broken @gradio/client CORS/credentials path.
-  async function callGradioChat(message) {
-    const submitRes = await fetch(`${SPACE_URL}/gradio_api/call/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: [message, []] })
-    });
-
-    if (!submitRes.ok) {
-      throw new Error(`Submit failed: ${submitRes.status}`);
-    }
-
-    const { event_id } = await submitRes.json();
-
-    const streamRes = await fetch(`${SPACE_URL}/gradio_api/call/chat/${event_id}`);
-    const reader = streamRes.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-
-      const lines = buffer.split('\n');
-      for (const line of lines) {
-        if (line.startsWith('data:')) {
-          const jsonStr = line.slice(5).trim();
-          if (!jsonStr) continue;
-          try {
-            const parsed = JSON.parse(jsonStr);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              return parsed[0];
-            }
-          } catch (e) {
-            // not a JSON data line, skip
-          }
-        }
-      }
-    }
-    throw new Error('Stream ended without a result');
-  }
-
   async function handleSendMessage() {
     const text = userInput.value.trim();
     if (!text) return;
@@ -720,11 +688,26 @@
     appendMessage(text, 'user');
     userInput.value = '';
 
+    const typingId = appendMessage("Karoline is typing...", 'bot');
+
     try {
-      const reply = await callGradioChat(text);
-      appendMessage(reply || "I've passed your message along to Sadat!", 'bot');
+      if (!gradioApp) {
+        gradioApp = await Client.connect("sadat334/sadat-portfolio-chat");
+      }
+
+      // Calls your Hugging Face Space backend
+      const result = await gradioApp.predict("/chat", {
+        message: text,
+      });
+
+      removeMessage(typingId);
+      
+      const reply = result.data ? (Array.isArray(result.data) ? result.data[0] : result.data) : "I've passed your message along to Sadat!";
+      appendMessage(reply, 'bot');
+
     } catch (error) {
-      console.error('Error connecting to backend:', error);
+      console.error('Error communicating with AI backend:', error);
+      removeMessage(typingId);
       appendMessage("I'm having a brief connection hiccup, but your message is logged for Sadat!", 'bot');
     }
   }
@@ -735,6 +718,13 @@
     msgDiv.textContent = text;
     chatMessages.appendChild(msgDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+    return msgDiv;
+  }
+
+  function removeMessage(msgElement) {
+    if (msgElement && msgElement.parentNode) {
+      msgElement.parentNode.removeChild(msgElement);
+    }
   }
 
   sendBtn.addEventListener('click', handleSendMessage);
