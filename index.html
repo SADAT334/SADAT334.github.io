@@ -699,33 +699,38 @@
       // DEBUG: Log the raw response so we can see its exact structure in your browser console (F12)
       console.log("Raw Gradio Response:", result);
 
-      if (result && result.data) {
-        const data = result.data;
+      if (result) {
+        console.log("Raw Gradio Response:", result);
         
-        if (Array.isArray(data)) {
-          if (Array.isArray(data[0]) && data[0].length > 0) {
-            const lastTurn = data[0][data[0].length - 1];
-            if (Array.isArray(lastTurn) && lastTurn.length > 1) {
-              reply = lastTurn[1];
-            } else if (typeof lastTurn === 'string') {
-              reply = lastTurn;
+        // Helper function to find any valid string response recursively or from arrays
+        function extractText(obj) {
+          if (!obj) return null;
+          if (typeof obj === 'string') {
+            if (obj.includes('__type__') || obj.includes('chat_message')) return null;
+            return obj;
+          }
+          if (Array.isArray(obj)) {
+            for (let i = obj.length - 1; i >= 0; i--) {
+              const found = extractText(obj[i]);
+              if (found) return found;
             }
-          } 
-          else if (typeof data[0] === 'string' && !data[0].includes('__type__')) {
-            reply = data[0];
-          } 
-          else if (data[1]) {
-            if (typeof data[1] === 'string') {
-              reply = data[1];
-            } else if (Array.isArray(data[1]) && data[1].length > 0) {
-              const lastTurn = data[1][data[1].length - 1];
-              if (Array.isArray(lastTurn) && lastTurn.length > 1) {
-                reply = lastTurn[1];
+          } else if (typeof obj === 'object') {
+            // Check common property keys in Gradio outputs
+            if (obj.data) return extractText(obj.data);
+            if (obj.value) return extractText(obj.value);
+            for (let key in obj) {
+              if (key !== '__type__' && typeof obj[key] !== 'function') {
+                const found = extractText(obj[key]);
+                if (found) return found;
               }
             }
           }
-        } else if (typeof data === 'string') {
-          reply = data;
+          return null;
+        }
+
+        const extracted = extractText(result);
+        if (extracted) {
+          reply = extracted;
         }
       }
       
