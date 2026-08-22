@@ -695,10 +695,10 @@
         gradioApp = await Client.connect("sadat334/sadat-portfolio-chat");
       }
 
-      // Calls your Hugging Face Space backend
-      const result = await gradioApp.predict("/chat", [
-       text,
-       []
+      // Target index 0 to communicate with gr.ChatInterface without changing app.py
+      const result = await gradioApp.predict(0, [
+        text,
+        []
       ]);
 
       removeMessage(typingId);
