@@ -661,26 +661,6 @@
   let gradioApp = null;
 
   // Initialize connection to your Hugging Face Space
-  async function initGradioClient() {
-    try {
-      gradioApp = await Client.connect("sadat334/sadat-portfolio-chat");
-    } catch (err) {
-      console.error("Failed to connect to Hugging Face Space:", err);
-    }
-  }
-  initGradioClient();
-
-  launcherBtn.addEventListener('click', () => {
-    chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
-    if (chatWindow.style.display === 'flex') {
-      userInput.focus();
-    }
-  });
-
-  closeBtn.addEventListener('click', () => {
-    chatWindow.style.display = 'none';
-  });
-
   async function handleSendMessage() {
     const text = userInput.value.trim();
     if (!text) return;
@@ -695,45 +675,57 @@
         gradioApp = await Client.connect("sadat334/sadat-portfolio-chat");
       }
 
-      // Target index 0 to communicate with gr.ChatInterface without changing app.py
+      // Collect existing chat history so Karoline maintains context across turns
+      const currentHistory = [];
+      const messageElements = chatMessages.querySelectorAll('.ai-message');
+      
+      // Pair up user and bot messages for Gradio's chat format: [[user, bot], [user, bot], ...]
+      for (let i = 1; i < messageElements.length - 1; i += 2) {
+        if (messageElements[i] && messageElements[i+1]) {
+          currentHistory.push([messageElements[i].textContent, messageElements[i+1].textContent]);
+        }
+      }
+
+      // Target index 0 to communicate with gr.ChatInterface with proper history
       const result = await gradioApp.predict(0, [
         text,
-        []
+        currentHistory
       ]);
 
       removeMessage(typingId);
       
-let reply = "I've passed your message along to Sadat!";
+      let reply = "I've passed your message along to Sadat!";
       
-      if (result.data) {
-        // Find the actual message array or string inside result.data
-        let chatOutput = null;
+      // DEBUG: Log the raw response so we can see its exact structure in your browser console (F12)
+      console.log("Raw Gradio Response:", result);
+
+      if (result && result.data) {
+        const data = result.data;
         
-        if (Array.isArray(result.data)) {
-          // Look for an item that looks like a chat history array or a plain string
-          for (const item of result.data) {
-            if (Array.isArray(item) || (typeof item === 'string' && !item.includes('__type__'))) {
-              chatOutput = item;
-              break;
+        if (Array.isArray(data)) {
+          if (Array.isArray(data[0]) && data[0].length > 0) {
+            const lastTurn = data[0][data[0].length - 1];
+            if (Array.isArray(lastTurn) && lastTurn.length > 1) {
+              reply = lastTurn[1];
+            } else if (typeof lastTurn === 'string') {
+              reply = lastTurn;
+            }
+          } 
+          else if (typeof data[0] === 'string' && !data[0].includes('__type__')) {
+            reply = data[0];
+          } 
+          else if (data[1]) {
+            if (typeof data[1] === 'string') {
+              reply = data[1];
+            } else if (Array.isArray(data[1]) && data[1].length > 0) {
+              const lastTurn = data[1][data[1].length - 1];
+              if (Array.isArray(lastTurn) && lastTurn.length > 1) {
+                reply = lastTurn[1];
+              }
             }
           }
-          // Fallback to index 0 if nothing specific matched
-          if (!chatOutput) chatOutput = result.data[0];
-        } else {
-          chatOutput = result.data;
-        }
-
-        if (Array.isArray(chatOutput) && chatOutput.length > 0) {
-          const lastTurn = chatOutput[chatOutput.length - 1];
-          if (Array.isArray(lastTurn) && lastTurn.length > 1) {
-            reply = lastTurn[1]; // Bot's response text
-          } else {
-            reply = String(chatOutput);
-          }
-        } else if (typeof chatOutput === 'string' && !chatOutput.includes('__type__')) {
-          reply = chatOutput;
-        } else if (chatOutput && typeof chatOutput === 'object' && chatOutput.value) {
-          reply = chatOutput.value;
+        } else if (typeof data === 'string') {
+          reply = data;
         }
       }
       
