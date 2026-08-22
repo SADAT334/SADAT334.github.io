@@ -1,21 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- Basic character encoding (supports standard emojis and language configurations) -->
-  <meta charset="UTF-8" />
-  
-  <!-- Critical metadata layout scale configuration for perfect responsive mobile renders -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Primary browser application title layout element -->
-  <title>Sadat Mahmud | Data & Insights Portfolio</title>
-  
-  <!-- Calendly Core Widget UI Layout Styling Matrix -->
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-  
-  <!-- Links our updated custom glassmorphic layout stylesheet -->
-  <link rel="stylesheet" href="style.css" />
-</head>
+
 
 <body>
 
@@ -649,9 +632,7 @@
 </div>
 
 <!-- Widget Logic Script -->
-<script type="module">
-  import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client@1/dist/index.min.js";
-
+<script>
   const launcherBtn = document.getElementById('ai-launcher-btn');
   const chatWindow = document.getElementById('ai-chat-window');
   const closeBtn = document.getElementById('ai-close-btn');
@@ -659,16 +640,8 @@
   const userInput = document.getElementById('ai-user-input');
   const chatMessages = document.getElementById('ai-chat-messages');
 
-  // Connect to your Hugging Face Space once, reused for every message
-  let gradioClient = null;
-  async function getClient() {
-    if (!gradioClient) {
-      gradioClient = await Client.connect("Sadat334/sadat-portfolio-chat");
-    }
-    return gradioClient;
-  }
+  const SPACE_URL = 'https://sadat334-sadat-portfolio-chat.hf.space';
 
-  // Toggle chat window visibility
   launcherBtn.addEventListener('click', () => {
     chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
     if (chatWindow.style.display === 'flex') {
@@ -680,7 +653,50 @@
     chatWindow.style.display = 'none';
   });
 
-  // Function to send message to your Gradio Space via the official JS client
+  // Call Gradio's raw API directly with plain fetch (no credentials),
+  // bypassing the currently-broken @gradio/client CORS/credentials path.
+  async function callGradioChat(message) {
+    const submitRes = await fetch(`${SPACE_URL}/gradio_api/call/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: [message, []] })
+    });
+
+    if (!submitRes.ok) {
+      throw new Error(`Submit failed: ${submitRes.status}`);
+    }
+
+    const { event_id } = await submitRes.json();
+
+    const streamRes = await fetch(`${SPACE_URL}/gradio_api/call/chat/${event_id}`);
+    const reader = streamRes.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      const lines = buffer.split('\n');
+      for (const line of lines) {
+        if (line.startsWith('data:')) {
+          const jsonStr = line.slice(5).trim();
+          if (!jsonStr) continue;
+          try {
+            const parsed = JSON.parse(jsonStr);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              return parsed[0];
+            }
+          } catch (e) {
+            // not a JSON data line, skip
+          }
+        }
+      }
+    }
+    throw new Error('Stream ended without a result');
+  }
+
   async function handleSendMessage() {
     const text = userInput.value.trim();
     if (!text) return;
@@ -689,15 +705,8 @@
     userInput.value = '';
 
     try {
-      const client = await getClient();
-      // ChatInterface apps expose a "/chat" endpoint by default, taking (message, history)
-      const result = await client.predict("/chat", {
-        message: text,
-        history: []
-      });
-
-      const reply = (result && result.data && result.data[0]) || "I've passed your message along to Sadat!";
-      appendMessage(reply, 'bot');
+      const reply = await callGradioChat(text);
+      appendMessage(reply || "I've passed your message along to Sadat!", 'bot');
     } catch (error) {
       console.error('Error connecting to backend:', error);
       appendMessage("I'm having a brief connection hiccup, but your message is logged for Sadat!", 'bot');
