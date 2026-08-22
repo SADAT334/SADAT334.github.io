@@ -706,22 +706,34 @@
 let reply = "I've passed your message along to Sadat!";
       
       if (result.data) {
-        // gr.ChatInterface typically returns data[0] as an array of message pairs: [[user, bot], ...] or an object
-        const chatOutput = Array.isArray(result.data) ? result.data[0] : result.data;
+        // Find the actual message array or string inside result.data
+        let chatOutput = null;
         
+        if (Array.isArray(result.data)) {
+          // Look for an item that looks like a chat history array or a plain string
+          for (const item of result.data) {
+            if (Array.isArray(item) || (typeof item === 'string' && !item.includes('__type__'))) {
+              chatOutput = item;
+              break;
+            }
+          }
+          // Fallback to index 0 if nothing specific matched
+          if (!chatOutput) chatOutput = result.data[0];
+        } else {
+          chatOutput = result.data;
+        }
+
         if (Array.isArray(chatOutput) && chatOutput.length > 0) {
-          // Get the last interaction pair [user_msg, bot_msg]
           const lastTurn = chatOutput[chatOutput.length - 1];
           if (Array.isArray(lastTurn) && lastTurn.length > 1) {
-            reply = lastTurn[1]; // The bot's response text
+            reply = lastTurn[1]; // Bot's response text
           } else {
             reply = String(chatOutput);
           }
-        } else if (typeof chatOutput === 'string') {
+        } else if (typeof chatOutput === 'string' && !chatOutput.includes('__type__')) {
           reply = chatOutput;
-        } else if (chatOutput && typeof chatOutput === 'object') {
-          // Fallback if it's an object structure
-          reply = chatOutput.value || chatOutput.text || JSON.stringify(chatOutput);
+        } else if (chatOutput && typeof chatOutput === 'object' && chatOutput.value) {
+          reply = chatOutput.value;
         }
       }
       
