@@ -696,9 +696,10 @@
       }
 
       // Calls your Hugging Face Space backend
-      const result = await gradioApp.predict("/chat", {
-        message: text,
-      });
+      const result = await gradioApp.predict("/chat", [
+       text,
+       []
+      ]);
 
       removeMessage(typingId);
       
