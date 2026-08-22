@@ -660,8 +660,48 @@
 
   let gradioApp = null;
 
-  // Initialize connection to your Hugging Face Space
+  async function initGradioClient() {
+    try {
+      gradioApp = await Client.connect("sadat334/sadat-portfolio-chat");
+    } catch (err) {
+      console.error("Failed to connect to Hugging Face Space:", err);
+    }
+  }
+  initGradioClient();
+
+  if (launcherBtn && chatWindow) {
+    launcherBtn.addEventListener('click', () => {
+      const isVisible = chatWindow.style.display === 'flex';
+      chatWindow.style.display = isVisible ? 'none' : 'flex';
+      if (!isVisible && userInput) {
+        userInput.focus();
+      }
+    });
+  }
+
+  if (closeBtn && chatWindow) {
+    closeBtn.addEventListener('click', () => {
+      chatWindow.style.display = 'none';
+    });
+  }
+
+  function appendMessage(text, sender) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('ai-message', sender);
+    msgDiv.textContent = text;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return msgDiv;
+  }
+
+  function removeMessage(msgElement) {
+    if (msgElement && msgElement.parentNode) {
+      msgElement.parentNode.removeChild(msgElement);
+    }
+  }
+
   async function handleSendMessage() {
+    if (!userInput) return;
     const text = userInput.value.trim();
     if (!text) return;
 
@@ -675,18 +715,15 @@
         gradioApp = await Client.connect("sadat334/sadat-portfolio-chat");
       }
 
-      // Collect existing chat history so Karoline maintains context across turns
+      // Collect chat history
       const currentHistory = [];
       const messageElements = chatMessages.querySelectorAll('.ai-message');
-      
-      // Pair up user and bot messages for Gradio's chat format: [[user, bot], [user, bot], ...]
       for (let i = 1; i < messageElements.length - 1; i += 2) {
         if (messageElements[i] && messageElements[i+1]) {
           currentHistory.push([messageElements[i].textContent, messageElements[i+1].textContent]);
         }
       }
 
-      // Target index 0 to communicate with gr.ChatInterface with proper history
       const result = await gradioApp.predict(0, [
         text,
         currentHistory
@@ -695,14 +732,9 @@
       removeMessage(typingId);
       
       let reply = "I've passed your message along to Sadat!";
-      
-      // DEBUG: Log the raw response so we can see its exact structure in your browser console (F12)
       console.log("Raw Gradio Response:", result);
 
       if (result) {
-        console.log("Raw Gradio Response:", result);
-        
-        // Helper function to find any valid string response recursively or from arrays
         function extractText(obj) {
           if (!obj) return null;
           if (typeof obj === 'string') {
@@ -715,7 +747,6 @@
               if (found) return found;
             }
           } else if (typeof obj === 'object') {
-            // Check common property keys in Gradio outputs
             if (obj.data) return extractText(obj.data);
             if (obj.value) return extractText(obj.value);
             for (let key in obj) {
@@ -743,25 +774,17 @@
     }
   }
 
-  function appendMessage(text, sender) {
-    const msgDiv = document.createElement('div');
-    msgDiv.classList.add('ai-message', sender);
-    msgDiv.textContent = text;
-    chatMessages.appendChild(msgDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    return msgDiv;
+  if (sendBtn) {
+    sendBtn.addEventListener('click', handleSendMessage);
   }
 
-  function removeMessage(msgElement) {
-    if (msgElement && msgElement.parentNode) {
-      msgElement.parentNode.removeChild(msgElement);
-    }
+  if (userInput) {
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        handleSendMessage();
+      }
+    });
   }
-
-  sendBtn.addEventListener('click', handleSendMessage);
-  userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleSendMessage();
-  });
 </script>
 
 </body>
