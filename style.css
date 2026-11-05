@@ -170,12 +170,21 @@ body {
   top: 0;
   z-index: 100;
   display: flex;
+  flex-wrap: wrap; /* NEW */
+  gap: 1rem; /* NEW */
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 2rem;
   background: rgba(3, 6, 8, 0.85);
   backdrop-filter: blur(24px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 
 .card, .toolkit-item {
@@ -513,6 +522,8 @@ body {
 .resume-buttons {
   margin-top: 3.5rem;
   display: flex;
+  flex-wrap: wrap; /* NEW */
+  justify-content: center; /* NEW */
   gap: 1.5rem;
   position: relative;
   z-index: 10; 
@@ -876,10 +887,17 @@ body {
   max-width: 850px;
 }
 
-.bento-lifestyle-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+@media (max-width: 1024px) {
+  body { padding: 0 1rem; }
+  .bento-lifestyle-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+  }
+}
+
+@media (max-width: 600px) {
+  .bento-lifestyle-grid { 
+    grid-template-columns: 1fr; 
+  }
 }
 
 .bento-box {
@@ -948,7 +966,7 @@ body {
 .culinary-box:hover { box-shadow: 0 15px 40px rgba(16, 185, 129, 0.1); }
 .intelligence-box:hover { box-shadow: 0 15px 40px rgba(56, 189, 248, 0.1); }
 
-@media (max-width: 968deg) {
+@media (max-width: 968px) {
   .about-hero-split {
     grid-template-columns: 1fr;
     gap: 2.5rem;
@@ -1325,7 +1343,7 @@ h1 {
 
 /* Gallery Masonry Layout */
 .gallery-container {
-    display: columns;
+    display:block;
     column-count: 3;
     column-gap: 15px;
     padding: 20px;
